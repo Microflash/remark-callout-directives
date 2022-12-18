@@ -1,0 +1,46 @@
+{
+	"name": "@microflash/remark-callout-directives",
+	"version": "1.0.0",
+	"description": "remark plugin to render callouts and admonitions with directives",
+	"license": "MIT",
+	"keywords": [
+		"unified",
+		"remark",
+		"remark-plugin",
+		"plugin",
+		"markdown",
+		"directives",
+		"callouts",
+		"admonitions"
+	],
+	"repository": "https://github.com/Microflash/remark-callout-directives.git",
+	"bugs": "https://github.com/Microflash/remark-callout-directives/issues",
+	"homepage": "https://github.com/Microflash/remark-callout-directives#readme",
+	"author": "Naiyer Asif (https://mflash.dev)",
+	"type": "module",
+	"main": "index.js",
+	"files": [
+		"index.js",
+		"index.css",
+		"theme.css"
+	],
+	"scripts": {
+		"test": "ava"
+	},
+	"dependencies": {
+		"defu": "^6.1.1",
+		"hastscript": "^7.1.0",
+		"remark-parse": "^10.0.1",
+		"unified": "^10.1.2",
+		"unist-util-visit": "^4.1.1"
+	},
+	"devDependencies": {
+		"ava": "^5.1.0",
+		"remark": "^14.0.2"
+	},
+	"ava": {
+		"files": [
+			"test/**/*.test.js"
+		]
+	}
+}

@@ -1,0 +1,29 @@
+.callout-note {
+	--callout-background: hsl(208, 19%, 13%);
+	--callout-color: hsl(209, 14%, 62%);
+	--callout-border: hsl(207, 17%, 23%);
+}
+
+.callout-commend {
+	--callout-background: hsl(152, 100%, 7%);
+	--callout-color: hsl(153, 32%, 50%);
+	--callout-border: hsl(157, 100%, 13%);
+}
+
+.callout-warn {
+	--callout-background: hsl(26, 100%, 10%);
+	--callout-color: hsl(32, 93%, 41%);
+	--callout-border: hsl(30, 100%, 18%);
+}
+
+.callout-deter {
+	--callout-background: hsl(358, 100%, 10%);
+	--callout-color: hsl(2, 53%, 49%);
+	--callout-border: hsl(357, 83%, 21%);
+}
+
+.callout-assert {
+	--callout-background: hsl(222, 73%, 13%);
+	--callout-color: hsl(222, 91%, 64%);
+	--callout-border: hsl(222, 66%, 28%);
+}
