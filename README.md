@@ -1,7 +1,6 @@
 # remark-callout-directives
 
 [![npm](https://img.shields.io/npm/v/@microflash/remark-callout-directives)](https://www.npmjs.com/package/@microflash/remark-callout-directives)
-[![regression](https://github.com/Microflash/remark-callout-directives/actions/workflows/regression.yml/badge.svg)](https://github.com/Microflash/remark-callout-directives/actions/workflows/regression.yml)
 [![license](https://img.shields.io/npm/l/@microflash/remark-callout-directives)](./LICENSE.md)
 
 [remark](https://github.com/remarkjs/remark) plugin to render callouts and admonitions with [directives](https://talk.commonmark.org/t/generic-directives-plugins-syntax/444)
@@ -99,6 +98,8 @@ Running that with `node example.js` yields:
 </aside>
 ```
 
+> **Note** You should import [`remark-directive`](https://github.com/remarkjs/remark-directive) before this plugin for the callouts to work.
+
 ## API
 
 The default export is `remarkCalloutDirectives`.
@@ -112,41 +113,21 @@ The following options are available. All of them are optional.
 
 ### Themes
 
-To style the callouts, import the [index.css](./index.css) and [theme.css](./theme.css) files. Alternatively, you can skip importing [theme.css](./theme.css), and provide your own CSS properties to customize the appearance as follows.
+To style the callouts, import a theme from [`themes`](./themes/) folder.
 
-```css
-.callout-note {
-  --callout-background: hsl(208, 19%, 13%);
-  --callout-color: hsl(209, 14%, 62%);
-  --callout-border: hsl(207, 17%, 23%);
-}
+#### [`themes/microflash.css`](./themes/microflash.css)
 
-.callout-commend {
-  --callout-background: hsl(152, 100%, 7%);
-  --callout-color: hsl(153, 32%, 50%);
-  --callout-border: hsl(157, 100%, 13%);
-}
+![Microflash theme](./samples/microflash.png)
 
-.callout-warn {
-  --callout-background: hsl(26, 100%, 10%);
-  --callout-color: hsl(32, 93%, 41%);
-  --callout-border: hsl(30, 100%, 18%);
-}
+#### [`themes/infima.css`](./themes/infima.css)
 
-.callout-deter {
-  --callout-background: hsl(358, 100%, 10%);
-  --callout-color: hsl(2, 53%, 49%);
-  --callout-border: hsl(357, 83%, 21%);
-}
+![Infima theme](./samples/infima.png)
 
-.callout-assert {
-  --callout-background: hsl(222, 73%, 13%);
-  --callout-color: hsl(222, 91%, 64%);
-  --callout-border: hsl(222, 66%, 28%);
-}
-```
+#### [`themes/vitepress.css`](./themes/vitepress.css)
 
-For even more customization, you can write your own styles and skip importing both [index.css](./index.css) and [theme.css](./theme.css).
+![VitePress theme](./samples/vitepress.png)
+
+For more advanced customizations, take a look at the existing [themes](./themes/) and remix your own.
 
 ## Examples
 

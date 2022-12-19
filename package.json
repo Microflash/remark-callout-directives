@@ -1,6 +1,6 @@
 {
 	"name": "@microflash/remark-callout-directives",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "remark plugin to render callouts and admonitions with directives",
 	"license": "MIT",
 	"keywords": [
@@ -21,8 +21,7 @@
 	"main": "index.js",
 	"files": [
 		"index.js",
-		"index.css",
-		"theme.css"
+		"themes/*.css"
 	],
 	"scripts": {
 		"test": "ava"
