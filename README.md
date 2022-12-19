@@ -19,6 +19,7 @@
 	- [Example: callout with custom title](#example-callout-with-custom-title)
 	- [Example: custom callouts](#example-custom-callouts)
 	- [Example: configure aliases](#example-configure-aliases)
+	- [Example: configure element type](#example-configure-element-type)
 	- [Example: override the defaults](#example-override-the-defaults)
 - [License](#license)
 
@@ -252,6 +253,58 @@ Running that with `node example.js` yields:
     <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
 </aside>
+```
+
+### Example: configure element type
+
+By default, a callout is rendered as an [`aside`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside). You can override this behavior by providing a `tagName` for the callout.
+
+Say we have the following file `example.md`:
+
+```md
+:::assert
+Some **content** with _Markdown_ `syntax`.
+:::
+```
+
+And our module `example.js` looks as follows:
+
+```js
+import { read } from 'to-vfile'
+import { remark } from 'remark'
+import remarkDirective from 'remark-directive'
+import remarkCalloutDirectives from '@microflash/remark-callout-directives'
+
+main()
+
+async function main() {
+  const file = await remark()
+    .use(remarkDirective)
+    .use(remarkCalloutDirectives, {
+      callouts: {
+        assert: {
+          tagName: "div"
+        }
+      }
+    })
+    .process(await read('example.md'))
+
+  console.log(String(file))
+}
+```
+
+Running that with `node example.js` yields:
+
+```html
+<div class="callout callout-assert">
+  <div class="callout-indicator">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint callout-hint-assert"><path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/></svg>
+    <div class="callout-title">Info</div>
+  </div>
+  <div class="callout-content">
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
+  </div>
+</div>
 ```
 
 ### Example: override the defaults
