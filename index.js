@@ -1,10 +1,8 @@
 import { visit } from "unist-util-visit"
 import { fromHtml } from "hast-util-from-html"
-import { toMdast } from "hast-util-to-mdast"
+import { fromMarkdown } from "mdast-util-from-markdown"
 import { h } from "hastscript"
 import { defu } from "defu"
-
-const hastOptions = { fragment: true }
 
 function generate(title, children, hint) {
 	const indicators = []
@@ -19,20 +17,24 @@ function generate(title, children, hint) {
 			children: [
 				{
 					type: "html",
-					value: fromHtml(hint, hastOptions)
+					value: fromHtml(hint, { fragment: true })
 				}
 			]
 		})
 	}
 
-	indicators.push({
-		type: "paragraph",
-		data: {
+	const titleNode = fromMarkdown(title).children[0]
+	if (titleNode.type === "paragraph") {
+		titleNode.data = {
 			hName: "div",
 			hProperties: { className: ["callout-title"] }
-		},
-		children: toMdast(fromHtml(title, hastOptions)).children
-	})
+		}
+	} else {
+		titleNode.data = {
+			hProperties: { className: ["callout-title"] }
+		}
+	}
+	indicators.push(titleNode)
 
 	return [ 
 		{

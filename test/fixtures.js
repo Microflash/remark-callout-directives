@@ -25,6 +25,16 @@ export default [
 		output: `<aside class="callout callout-assert"><div class="callout-indicator"><div class="callout-hint"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint-assert"><path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"></path></svg></div><div class="callout-title">Info</div></div><div class="callout-content"><p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p></div></aside>`
 	},
 	{
+		title: "callout with custom title",
+		input: `:::warn{title="Be warned!"}\nSome **content** with _Markdown_ \`syntax\`.\n:::`,
+		output: `<aside class="callout callout-warn"><div class="callout-indicator"><div class="callout-hint"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint-warn"><path d="M12 9v4m0 4h.01M8.681 4.082C9.351 2.797 10.621 2 12 2s2.649.797 3.319 2.082l6.203 11.904a4.28 4.28 0 0 1-.046 4.019C20.793 21.241 19.549 22 18.203 22H5.797c-1.346 0-2.59-.759-3.273-1.995a4.28 4.28 0 0 1-.046-4.019L8.681 4.082Z"></path></svg></div><div class="callout-title">Be warned!</div></div><div class="callout-content"><p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p></div></aside>`
+	},
+	{
+		title: "callout with markdown title",
+		input: `:::warn{title="**Hold** on _there_!"}\nSome **content** with _Markdown_ \`syntax\`.\n:::`,
+		output: `<aside class="callout callout-warn"><div class="callout-indicator"><div class="callout-hint"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint-warn"><path d="M12 9v4m0 4h.01M8.681 4.082C9.351 2.797 10.621 2 12 2s2.649.797 3.319 2.082l6.203 11.904a4.28 4.28 0 0 1-.046 4.019C20.793 21.241 19.549 22 18.203 22H5.797c-1.346 0-2.59-.759-3.273-1.995a4.28 4.28 0 0 1-.046-4.019L8.681 4.082Z"></path></svg></div><div class="callout-title"><strong>Hold</strong> on <em>there</em>!</div></div><div class="callout-content"><p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p></div></aside>`
+	},
+	{
 		title: "custom shoutout callout",
 		options: {
 			callouts: {
