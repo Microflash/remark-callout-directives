@@ -1,6 +1,6 @@
 {
 	"name": "@microflash/remark-callout-directives",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"description": "remark plugin to render callouts and admonitions with directives",
 	"license": "MIT",
 	"keywords": [
@@ -28,14 +28,18 @@
 	},
 	"dependencies": {
 		"defu": "^6.1.1",
+		"hast-util-from-html": "^1.0.0",
+		"hast-util-to-mdast": "^8.4.1",
 		"hastscript": "^7.1.0",
-		"remark-parse": "^10.0.1",
-		"unified": "^10.1.2",
 		"unist-util-visit": "^4.1.1"
 	},
 	"devDependencies": {
 		"ava": "^5.1.0",
-		"remark": "^14.0.2"
+		"rehype-stringify": "^9.0.3",
+		"remark-directive": "^2.0.1",
+		"remark-parse": "^10.0.1",
+		"remark-rehype": "^10.1.0",
+		"unified": "^10.1.2"
 	},
 	"ava": {
 		"files": [
