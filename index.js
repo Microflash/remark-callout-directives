@@ -1,11 +1,10 @@
-import { visit } from "unist-util-visit"
-import { fromHtml } from "hast-util-from-html"
-import { fromMarkdown } from "mdast-util-from-markdown"
-import { h } from "hastscript"
-import { defu } from "defu"
+import { visit } from "unist-util-visit";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { h } from "hastscript";
+import { defu } from "defu";
 
 function generate(title, children, hint) {
-	const indicators = []
+	const indicators = [];
 
 	if (hint) {
 		indicators.push({
@@ -17,24 +16,24 @@ function generate(title, children, hint) {
 			children: [
 				{
 					type: "html",
-					value: fromHtml(hint, { fragment: true })
+					value: hint
 				}
 			]
-		})
+		});
 	}
 
-	const titleNode = fromMarkdown(title).children[0]
+	const titleNode = fromMarkdown(title).children[0];
 	if (titleNode.type === "paragraph") {
 		titleNode.data = {
 			hName: "div",
 			hProperties: { className: ["callout-title"] }
-		}
+		};
 	} else {
 		titleNode.data = {
 			hProperties: { className: ["callout-title"] }
-		}
+		};
 	}
-	indicators.push(titleNode)
+	indicators.push(titleNode);
 
 	return [ 
 		{
@@ -53,7 +52,7 @@ function generate(title, children, hint) {
 			},
 			children
 		}
-	]
+	];
 }
 
 const defaults = {
@@ -80,35 +79,35 @@ const defaults = {
 			hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint-assert"><path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/></svg>`
 		}
 	}
-}
+};
 
 export default function remarkCalloutDirectives(userOptions = {}) {
-	const options = defu(userOptions, defaults)
-	const { callouts } = options
-	const aliases = defu(options.aliases, Object.keys(callouts).reduce((a, v) => ({ ...a, [v]: v}), {}))
+	const options = defu(userOptions, defaults);
+	const { callouts } = options;
+	const aliases = defu(options.aliases, Object.keys(callouts).reduce((a, v) => ({ ...a, [v]: v}), {}));
 	return (tree) => {
 		visit(tree, (node) => {
 			if (node.type === "containerDirective") {
 				if (!aliases[node.name]) {
-					return
+					return;
 				}
 
-				const calloutType = aliases[node.name]
-				const callout = callouts[calloutType]
-				const data = node.data || (node.data = {})
-				const { title, ...attributes } = node.attributes
+				const calloutType = aliases[node.name];
+				const callout = callouts[calloutType];
+				const data = node.data || (node.data = {});
+				const { title, ...attributes } = node.attributes;
 
 				node.attributes = {
 					...attributes,
 					class: `callout callout-${calloutType}`
-				}
+				};
 
-				node.children = generate(title || callout.title, node.children, callout.hint)
+				node.children = generate(title || callout.title, node.children, callout.hint);
 
-				const tagName = callout.tagName || "aside"
-				data.hName = tagName
-				data.hProperties = h(tagName, node.attributes).properties
+				const tagName = callout.tagName || "aside";
+				data.hName = tagName;
+				data.hProperties = h(tagName, node.attributes).properties;
 			}
-		})
-	}
+		});
+	};
 }
