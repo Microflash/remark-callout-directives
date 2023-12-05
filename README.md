@@ -6,8 +6,6 @@
 
 [remark](https://github.com/remarkjs/remark) plugin to render callouts and admonitions with [directives](https://talk.commonmark.org/t/generic-directives-plugins-syntax/444)
 
-## Contents
-
 - [What’s this?](#whats-this)
 - [When should I use this?](#when-should-i-use-this)
 - [Prerequisites](#prerequisites)
@@ -42,7 +40,7 @@ You should import [`remark-directive`](https://github.com/remarkjs/remark-direct
 
 This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm](https://docs.npmjs.com/cli/install):
+In Node.js (version 16.0+), install with [npm](https://docs.npmjs.com/cli/install):
 
 ```sh
 npm install @microflash/remark-callout-directives
@@ -51,14 +49,14 @@ npm install @microflash/remark-callout-directives
 In Deno, with [esm.sh](https://esm.sh/):
 
 ```js
-import remarkCalloutDirectives from 'https://esm.sh/@microflash/remark-callout-directives'
+import remarkCalloutDirectives from "https://esm.sh/@microflash/remark-callout-directives"
 ```
 
 In browsers, with [esm.sh](https://esm.sh/):
 
 ```html
 <script type="module">
-  import remarkCalloutDirectives from 'https://esm.sh/@microflash/remark-callout-directives?bundle'
+  import remarkCalloutDirectives from "https://esm.sh/@microflash/remark-callout-directives?bundle"
 </script>
 ```
 
