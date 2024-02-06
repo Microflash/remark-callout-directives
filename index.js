@@ -99,7 +99,7 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 
 				node.attributes = {
 					...attributes,
-					class: `callout callout-${calloutType}`
+					class: "class" in attributes ? `callout callout-${calloutType} ${attributes.class}` : `callout callout-${calloutType}`
 				};
 
 				node.children = generate(title || callout.title, node.children, callout.hint);
