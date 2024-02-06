@@ -21,6 +21,8 @@
 	- [Example: custom callouts](#example-custom-callouts)
 	- [Example: configure aliases](#example-configure-aliases)
 	- [Example: configure element type](#example-configure-element-type)
+	- [Example: configure element type globally](#example-configure-element-type-globally)
+	- [Example: configure element type globally as well as specifically for a callout](#example-configure-element-type-globally-as-well-as-specifically-for-a-callout)
 	- [Example: override the defaults](#example-override-the-defaults)
 - [License](#license)
 
@@ -126,6 +128,7 @@ The following options are available. All of them are optional.
 
 - `aliases`: a list of aliases for the `callouts`
 - `callouts`: an object containing the callout definitions
+- `tagName`: global custom element type. If specified, it'll override the default `aside` element type. This can be overridden by callout specific configuration (`callouts.<calloutName>.tagName`).
 
 ### Default options
 
@@ -417,6 +420,147 @@ Running that with `node example.js` yields:
     <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
 </div>
+```
+
+### Example: configure element type globally
+
+You can override the element type of all callouts by providing a `tagName`.
+
+Say we have the following file `example.md`:
+
+```md
+:::assert
+Some **content** with _Markdown_ `syntax`.
+:::
+```
+
+And our module `example.js` looks as follows:
+
+```js
+import { read } from "to-vfile"
+import { unified } from "unified"
+import remarkParse from "remark-parse"
+import remarkDirective from "remark-directive"
+import remarkCalloutDirectives from "@microflash/remark-callout-directives"
+import remarkRehype from "remark-rehype"
+import rehypeStringify from "rehype-stringify"
+
+main()
+
+async function main() {
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkDirective)
+    .use(remarkCalloutDirectives, {
+      tagName: "section"
+    })
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeStringify, { allowDangerousHtml: true })
+    .process(await read("example.md"))
+
+  console.log(String(file))
+}
+```
+
+Running that with `node example.js` yields:
+
+```html
+<section class="callout callout-assert">
+  <div class="callout-indicator">
+    <div class="callout-hint">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint-assert">
+        <path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/>
+      </svg>
+    </div>
+    <div class="callout-title">Info</div>
+  </div>
+  <div class="callout-content">
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
+  </div>
+</section>
+```
+
+### Example: configure element type globally as well as specifically for a callout
+
+You can mix the `tagName` configurations globally and specifically for a callout.
+
+Say we have the following file `example.md`:
+
+```md
+:::assert
+Some **content** with _Markdown_ `syntax`.
+:::
+
+:::note
+Some **content** with _Markdown_ `syntax`.
+:::
+```
+
+And our module `example.js` looks as follows:
+
+```js
+import { read } from "to-vfile"
+import { unified } from "unified"
+import remarkParse from "remark-parse"
+import remarkDirective from "remark-directive"
+import remarkCalloutDirectives from "@microflash/remark-callout-directives"
+import remarkRehype from "remark-rehype"
+import rehypeStringify from "rehype-stringify"
+
+main()
+
+async function main() {
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkDirective)
+    .use(remarkCalloutDirectives, {
+      tagName: "section",
+      callouts: {
+        assert: {
+          tagName: "div"
+        }
+      }
+    })
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeStringify, { allowDangerousHtml: true })
+    .process(await read("example.md"))
+
+  console.log(String(file))
+}
+```
+
+Running that with `node example.js` yields:
+
+```html
+<div class="callout callout-assert">
+  <div class="callout-indicator">
+    <div class="callout-hint">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint-assert">
+        <path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/>
+      </svg>
+    </div>
+    <div class="callout-title">Info</div>
+  </div>
+  <div class="callout-content">
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
+  </div>
+</div>
+
+<section class="callout callout-note">
+  <div class="callout-indicator">
+    <div class="callout-hint">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="callout-hint-note">
+        <path d="M12 8h.01M12 12v4"/>
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+    </div>
+    <div class="callout-title">Note</div>
+  </div>
+  <div class="callout-content">
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.
+    </p>
+  </div>
+</section>
 ```
 
 ### Example: override the defaults

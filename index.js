@@ -104,9 +104,10 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 
 				node.children = generate(title || callout.title, node.children, callout.hint);
 
-				const tagName = callout.tagName || "aside";
-				data.hName = tagName;
-				data.hProperties = h(tagName, node.attributes).properties;
+				const tagName = callout.tagName || options.tagName || "aside";
+				const hast = h(tagName, node.attributes);
+				data.hName = hast.tagName;
+				data.hProperties = hast.properties;
 			}
 		});
 	};
