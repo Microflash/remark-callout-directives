@@ -1,6 +1,6 @@
 {
 	"name": "@microflash/remark-callout-directives",
-	"version": "3.1.0",
+	"version": "4.0.0",
 	"description": "remark plugin to render callouts and admonitions with directives",
 	"license": "MIT",
 	"keywords": [
@@ -16,13 +16,21 @@
 	"repository": "https://github.com/Microflash/remark-callout-directives.git",
 	"bugs": "https://github.com/Microflash/remark-callout-directives/issues",
 	"homepage": "https://github.com/Microflash/remark-callout-directives#readme",
-	"author": "Naiyer Asif (https://mflash.dev)",
+	"author": "Naiyer Asif (https://www.naiyerasif.com)",
 	"type": "module",
 	"main": "index.js",
 	"files": [
 		"index.js",
-		"themes/*.css"
+		"themes/**/*"
 	],
+	"exports": {
+		".": "./index.js",
+		"./config/github": "./themes/github/index.js",
+		"./config/vitepress": "./themes/vitepress/index.js",
+		"./theme/github": "./themes/github/index.css",
+		"./theme/microflash": "./themes/microflash/index.css",
+		"./theme/vitepress": "./themes/vitepress/index.css"
+	},
 	"scripts": {
 		"test": "ava"
 	},

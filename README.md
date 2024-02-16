@@ -166,17 +166,17 @@ By default, the following callouts and aliases are preconfigured.
 
 To style the callouts, import a theme from [`themes`](./themes/) folder.
 
-#### [`themes/microflash.css`](./themes/microflash.css)
+#### [GitHub](./themes/github/)
 
-![Microflash theme](./samples/microflash.png)
+![GitHub theme](./samples/github.png)
 
-#### [`themes/infima.css`](./themes/infima.css)
-
-![Infima theme](./samples/infima.png)
-
-#### [`themes/vitepress.css`](./themes/vitepress.css)
+#### [VitePress](./themes/vitepress/)
 
 ![VitePress theme](./samples/vitepress.png)
+
+#### [Microflash](./themes/microflash/)
+
+![Microflash theme](./samples/microflash.png)
 
 For more advanced customizations, take a look at the existing [themes](./themes/) and remix your own.
 

@@ -1,0 +1,113 @@
+:root {
+	--callout-bg-note: hsl(0, 0%, 97%, 0.3);
+	--callout-bg-commend: hsl(98, 77%, 93%, 0.3);
+	--callout-bg-warn: hsl(30, 81%, 94%, 0.3);
+	--callout-bg-deter: hsl(7, 74%, 95%, 0.3);
+	--callout-bg-assert: hsl(221, 90%, 96%, 0.3);
+	--callout-fg-note: hsl(0, 0%, 23%);
+	--callout-fg-commend: hsl(106, 61%, 23%);
+	--callout-fg-warn: hsl(33, 69%, 27%);
+	--callout-fg-deter: hsl(356, 68%, 36%);
+	--callout-fg-assert: hsl(213, 62%, 35%);
+	--callout-accent-note: hsl(90, 7%, 88%);
+	--callout-accent-commend: hsl(103, 76%, 78%);
+	--callout-accent-warn: hsl(29, 82%, 87%);
+	--callout-accent-deter: hsl(4, 73%, 91%);
+	--callout-accent-assert: hsl(220, 91%, 92%);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--callout-bg-note: hsl(0, 0%, 13%, 0.5);
+		--callout-bg-commend: hsl(108, 78%, 7%, 0.5);
+		--callout-bg-warn: hsl(32, 86%, 9%, 0.5);
+		--callout-bg-deter: hsl(358, 82%, 13%, 0.5);
+		--callout-bg-assert: hsl(214, 77%, 12%, 0.5);
+		--callout-fg-note: hsl(0, 0%, 74%);
+		--callout-fg-commend: hsl(105, 51%, 51%);
+		--callout-fg-warn: hsl(32, 69%, 59%);
+		--callout-fg-deter: hsl(3, 77%, 74%);
+		--callout-fg-assert: hsl(217, 91%, 73%);
+		--callout-accent-note: hsl(0, 0%, 22%);
+		--callout-accent-commend: hsl(106, 70%, 13%);
+		--callout-accent-warn: hsl(33, 77%, 15%);
+		--callout-accent-deter: hsl(356, 73%, 22%);
+		--callout-accent-assert: hsl(214, 68%, 21%);
+	}
+}
+
+.callout {
+	--calloutBgColor: var(--callout-bg-color, var(--callout-bg-note));
+	--calloutColor: var(--callout-fg-color, var(--callout-fg-note));
+	--calloutBorderColor: var(--callout-accent, var(--callout-accent-note));
+	--calloutBorderThickness: 5px;
+	--calloutBorderRadius: 16px;
+	--calloutContentPadding: 1ch;
+
+	background-color: var(--calloutBgColor);
+	border: var(--calloutBorderThickness) solid var(--calloutBorderColor);
+	border-radius: var(--calloutBorderRadius);
+}
+
+.callout-indicator {
+	display: flex;
+	align-items: center;
+	color: var(--calloutColor);
+	background-color: var(--calloutBorderColor);
+	padding: 0 0.5ch var(--calloutBorderThickness);
+	line-height: 1;
+	font-weight: 500;
+}
+
+.callout-indicator > svg:first-of-type {
+	margin-right: 0.5rem;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2px;
+	width: 24px;
+	height: 24px;
+	min-width: 24px;
+	min-height: 24px;
+}
+
+.callout-content {
+	padding: var(--calloutContentPadding);
+	border-image: 
+			radial-gradient(#0000 71%, var(--calloutBorderColor) 72%)
+			49.9%/calc(var(--calloutBorderRadius) - (var(--calloutContentPadding) / 2));
+}
+
+.callout-content:first-child,
+.callout-content:only-child {
+	margin-block-start: 0;
+}
+
+.callout-content:last-child,
+.callout-content:only-child {
+	margin-block-end: 0;
+}
+
+
+.callout-commend {
+	--callout-bg-color: var(--callout-bg-commend);
+	--callout-fg-color: var(--callout-fg-commend);
+	--callout-accent: var(--callout-accent-commend);
+}
+
+.callout-warn {
+	--callout-bg-color: var(--callout-bg-warn);
+	--callout-fg-color: var(--callout-fg-warn);
+	--callout-accent: var(--callout-accent-warn);
+}
+
+.callout-deter {
+	--callout-bg-color: var(--callout-bg-deter);
+	--callout-fg-color: var(--callout-fg-deter);
+	--callout-accent: var(--callout-accent-deter);
+}
+
+.callout-assert {
+	--callout-bg-color: var(--callout-bg-assert);
+	--callout-fg-color: var(--callout-fg-assert);
+	--callout-accent: var(--callout-accent-assert);
+}
