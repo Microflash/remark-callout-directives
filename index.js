@@ -93,9 +93,7 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 					class: "class" in attributes ? `callout callout-${calloutType} ${attributes.class}` : `callout callout-${calloutType}`
 				};
 
-				const children = !!node.children && node.children.length === 1 ? 
-					node.children[0].children : node.children;
-				node.children = generate(title || callout.title, children, callout.hint);
+				node.children = generate(title || callout.title, node.children, callout.hint);
 
 				const tagName = callout.tagName || options.tagName || "aside";
 				const hast = h(tagName, node.attributes);
