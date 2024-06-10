@@ -1,13 +1,16 @@
-import test from "ava";
+import path from "path";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import remarkDirective from "remark-directive";
+import { expect, it } from "vitest";
 import remarkCalloutDirectives from "../index.js";
-import fixtures from "./fixtures.js";
+import scenarios from "./fixtures.js";
 
-async function process(markdown, options = {}) {
+const scenario = scenarios.map(s => s.title);
+
+async function parse(markdown, options = {}) {
 	const file = await unified()
 		.use(remarkParse)
 		.use(remarkDirective)
@@ -15,14 +18,21 @@ async function process(markdown, options = {}) {
 		.use(remarkRehype, { allowDangerousHtml: true })
 		.use(rehypeStringify, { allowDangerousHtml: true })
 		.process(markdown);
-
 	return String(file);
 }
 
-for (const fixture of fixtures) {
-	const { title, input, output, options = {} } = fixture;
-	test(`test '${title}'`, async t => {
-		const result = await process(input, options);
-		t.is(output, result);
-	});
-}
+const currentDirectory = process.cwd();
+const testDirectory = "test";
+const snapshotsDirectory = "snapshots";
+
+it.each(scenario)(`Test: %s`, async (rule) => {
+	const { input, options = {} } = scenarios.find(s => s.title === rule);
+	const result = await parse(input, options);
+	const snapshot = path.resolve(
+		currentDirectory,
+		testDirectory,
+		snapshotsDirectory,
+		`${rule.replaceAll(" ", "_")}.html`
+	);
+	await expect(result).toMatchFileSnapshot(snapshot);
+});
