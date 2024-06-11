@@ -34,6 +34,7 @@
 
 .callout-indicator > svg:first-of-type {
 	margin-right: 0.5rem;
+	fill: currentColor;
 }
 
 .callout-content:first-child,
