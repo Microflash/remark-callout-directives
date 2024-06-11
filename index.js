@@ -3,47 +3,51 @@ import { fromMarkdown } from "mdast-util-from-markdown";
 import { h } from "hastscript";
 import { defu } from "defu";
 
-function generate(title, children, hint) {
-	const indicators = [];
+function generate(title, children, hint, showIndicator) {
+	const calloutNodes = [];
 
-	if (hint) {
-		indicators.push({
-			type: "html",
-			value: hint
-		});
-	}
+	if (showIndicator) {
+		const indicators = [];
 
-	const titleNode = fromMarkdown(title).children[0];
-	if (titleNode.type === "paragraph") {
-		titleNode.data = {
-			hName: "div",
-			hProperties: { className: ["callout-title"] }
-		};
-	} else {
-		titleNode.data = {
-			hProperties: { className: ["callout-title"] }
-		};
-	}
-	indicators.push(titleNode);
+		if (hint) {
+			indicators.push({
+				type: "html",
+				value: hint
+			});
+		}
 
-	return [
-		{
+		const titleNode = fromMarkdown(title).children[0];
+		if (titleNode.type === "paragraph") {
+			titleNode.data = {
+				hName: "div",
+				hProperties: { className: ["callout-title"] }
+			};
+		} else {
+			titleNode.data = {
+				hProperties: { className: ["callout-title"] }
+			};
+		}
+		indicators.push(titleNode);
+		calloutNodes.push({
 			type: "paragraph",
 			data: {
 				hName: "div",
 				hProperties: { className: ["callout-indicator"] }
 			},
 			children: indicators
+		});
+	}
+
+	calloutNodes.push({
+		type: "paragraph",
+		data: {
+			hName: "div",
+			hProperties: { className: ["callout-content"] }
 		},
-		{
-			type: "paragraph",
-			data: {
-				hName: "div",
-				hProperties: { className: ["callout-content"] }
-			},
-			children
-		}
-	];
+		children
+	});
+
+	return calloutNodes;
 }
 
 const defaults = {
@@ -86,14 +90,19 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 				const calloutType = aliases[node.name];
 				const callout = callouts[calloutType];
 				const data = node.data || (node.data = {});
-				const { title, ...attributes } = node.attributes;
+				const { title, showIndicator = "true", ...attributes } = node.attributes;
 
 				node.attributes = {
 					...attributes,
 					class: "class" in attributes ? `callout callout-${calloutType} ${attributes.class}` : `callout callout-${calloutType}`
 				};
 
-				node.children = generate(title || callout.title, node.children, callout.hint);
+				node.children = generate(
+					title || callout.title,
+					node.children,
+					callout.hint,
+					showIndicator.toLowerCase() === "true"
+				);
 
 				const tagName = callout.tagName || options.tagName || "aside";
 				const hast = h(tagName, node.attributes);

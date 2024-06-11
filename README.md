@@ -24,6 +24,7 @@
 	- [Example: configure element type globally](#example-configure-element-type-globally)
 	- [Example: configure element type globally as well as specifically for a callout](#example-configure-element-type-globally-as-well-as-specifically-for-a-callout)
 	- [Example: override the defaults](#example-override-the-defaults)
+	- [Example: remove the indicator](#example-remove-the-indicator)
 - [License](#license)
 
 ## What’s this?
@@ -621,6 +622,54 @@ Running that with `node example.js` yields:
     </div>
     <div class="callout-title">Tip</div>
   </div>
+  <div class="callout-content">
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
+  </div>
+</aside>
+```
+
+### Example: remove the indicator
+
+You can remove the indicator using the `showIndicator="false"` property on a callout.
+
+Say we have the following file `example.md`:
+
+```md
+::note{showIndicator="false"}
+Some **content** with _Markdown_ `syntax`.
+:::
+```
+
+And our module `example.js` looks as follows:
+
+```js
+import { read } from "to-vfile"
+import { unified } from "unified"
+import remarkParse from "remark-parse"
+import remarkDirective from "remark-directive"
+import remarkCalloutDirectives from "@microflash/remark-callout-directives"
+import remarkRehype from "remark-rehype"
+import rehypeStringify from "rehype-stringify"
+
+main()
+
+async function main() {
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkDirective)
+    .use(remarkCalloutDirectives)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeStringify, { allowDangerousHtml: true })
+    .process(await read("example.md"))
+
+  console.log(String(file))
+}
+```
+
+Running that with `node example.js` yields:
+
+```html
+<aside class="callout callout-note">
   <div class="callout-content">
     <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
