@@ -25,6 +25,7 @@
 	- [Example: configure element type globally as well as specifically for a callout](#example-configure-element-type-globally-as-well-as-specifically-for-a-callout)
 	- [Example: override the defaults](#example-override-the-defaults)
 	- [Example: remove the indicator](#example-remove-the-indicator)
+	- [Example: using a theme](#example-using-a-theme)
 - [License](#license)
 
 ## What’s this?
@@ -674,6 +675,66 @@ Running that with `node example.js` yields:
     <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
 </aside>
+```
+
+### Example: using a theme
+
+Say, you want to use the [GitHub](./themes/github/) theme.
+
+First, import the options for this theme and pass it to the plugin as follows.
+
+```js
+import { read } from "to-vfile"
+import { unified } from "unified"
+import remarkParse from "remark-parse"
+import remarkDirective from "remark-directive"
+import remarkCalloutDirectives from "@microflash/remark-callout-directives"
+import githubCalloutOptions from "@microflash/remark-callout-directives/config/github"
+import remarkRehype from "remark-rehype"
+import rehypeStringify from "rehype-stringify"
+
+main()
+
+async function main() {
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkDirective)
+    .use(remarkCalloutDirectives, githubCalloutOptions)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeStringify, { allowDangerousHtml: true })
+    .process(await read("example.md"))
+
+  console.log(String(file))
+}
+```
+
+Finally, import the CSS file. If you've an entrypoint file in your application, you can import the CSS as follows.
+
+```js
+import "@microflash/remark-callout-directives/theme/github"
+// or using URL import
+import "https://unpkg.com/@microflash/remark-callout-directives/themes/github/index.css"
+```
+
+If you're bundling the CSS files using a bundler, you can import the CSS in your main CSS file containing other imports.
+
+```css
+/* other imports... */
+@import "@microflash/remark-callout-directives/theme/github";
+```
+
+If you're using Sass, you can import the CSS in your main Sass file.
+
+```scss
+// other Sass imports
+@use "@microflash/remark-callout-directives/theme/github";
+```
+
+You can also import the CSS file directly in browsers, with [unpkg.com](https://unpkg.com) or [jsdelivr.net](https://jsdelivr.net):
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@microflash/remark-callout-directives/themes/github/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@microflash/remark-callout-directives/themes/github/index.css">
 ```
 
 ## License
