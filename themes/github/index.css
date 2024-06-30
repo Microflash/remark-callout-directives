@@ -34,6 +34,8 @@
 .callout-hint > svg {
 	margin-right: 0.5rem;
 	fill: currentColor;
+	display: inline-block;
+	vertical-align: text-bottom;
 }
 
 .callout-content:first-child,

@@ -60,6 +60,8 @@
 
 .callout-hint > svg {
 	margin-right: 0.5rem;
+	display: inline-block;
+	vertical-align: text-bottom;
 	fill: none;
 	stroke: currentColor;
 	stroke-width: 2px;
