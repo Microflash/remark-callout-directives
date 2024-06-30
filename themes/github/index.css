@@ -26,13 +26,12 @@
 
 .callout-indicator {
 	display: flex;
-	align-items: center;
 	line-height: 1;
 	margin-bottom: 16px;
 	color: var(--calloutAccent);
 }
 
-.callout-indicator > svg:first-of-type {
+.callout-hint > svg {
 	margin-right: 0.5rem;
 	fill: currentColor;
 }

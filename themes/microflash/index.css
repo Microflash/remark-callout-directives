@@ -51,7 +51,6 @@
 
 .callout-indicator {
 	display: flex;
-	align-items: center;
 	color: var(--calloutColor);
 	background-color: var(--calloutBorderColor);
 	padding: 0 0.5ch var(--calloutBorderThickness);
@@ -59,7 +58,7 @@
 	font-weight: 500;
 }
 
-.callout-indicator > svg:first-of-type {
+.callout-hint > svg {
 	margin-right: 0.5rem;
 	fill: none;
 	stroke: currentColor;

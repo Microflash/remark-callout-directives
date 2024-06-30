@@ -25,13 +25,12 @@
 
 .callout-indicator {
 	display: flex;
-	align-items: center;
 	margin-bottom: 8px;
 	text-transform: uppercase;
 	font-weight: 600;
 }
 
-.callout-indicator > svg:first-of-type {
+.callout-hint > svg {
 	margin-right: 0.5rem;
 	fill: none;
 	stroke: currentColor;

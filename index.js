@@ -11,8 +11,17 @@ function generate(title, children, hint, showIndicator) {
 
 		if (hint) {
 			indicators.push({
-				type: "html",
-				value: hint
+				type: "paragraph",
+				data: {
+					hName: "div",
+					hProperties: { className: ["callout-hint"] }
+				},
+				children: [
+					{
+						type: "html",
+						value: hint
+					}
+				]
 			});
 		}
 
