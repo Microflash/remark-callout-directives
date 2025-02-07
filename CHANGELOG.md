@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.3] - 2025-02-07
+
+### Patched
+
+- RCE vulnerability in Vitest <https://github.com/Microflash/remark-callout-directives/security/dependabot/4>
+
 ## [4.3.2] - 2024-10-26
 
 ### Patched
@@ -137,6 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Plugin with Microflash theme
 
+[4.3.3]: https://github.com/Microflash/remark-callout-directives/compare/v4.3.2...v4.3.3
 [4.3.2]: https://github.com/Microflash/remark-callout-directives/compare/v4.3.1...v4.3.2
 [4.3.1]: https://github.com/Microflash/remark-callout-directives/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/Microflash/remark-callout-directives/compare/v4.2.0...v4.3.0
