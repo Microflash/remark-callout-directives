@@ -1,6 +1,6 @@
 {
 	"name": "@microflash/remark-callout-directives",
-	"version": "4.5.0",
+	"version": "5.0.0",
 	"description": "Remark plugin to render callouts with directives",
 	"license": "MIT",
 	"keywords": [

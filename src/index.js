@@ -14,7 +14,7 @@
  * @typedef {Object} CalloutPrefs
  * @property {string} [hint] - Optional SVG icon representing the callout type
  * @property {boolean} collapsible - Whether the callout is collapse (default: `false`), only `true` when tagName is `details`
- * @property {boolean} showIndicator - Whether to display the hint icon and title indicator (default: `true`)
+ * @property {boolean} showHint - Whether to display the hint icon (default: `true`)
  */
 
 /**
@@ -84,48 +84,45 @@ const defaults = {
    */
 	generate(title, children, prefs) {
 		const calloutNodes = [];
+		const indicators = [];
 
-		if (prefs.showIndicator) {
-			const indicators = [];
-
-			if (prefs.hint) {
-				indicators.push({
-					type: "paragraph",
-					data: {
-						hName: "div",
-						hProperties: { className: ["callout-hint"] }
-					},
-					children: [
-						{
-							type: "html",
-							value: prefs.hint
-						}
-					]
-				});
-			}
-
-			const titleNode = fromMarkdown(title).children.at(0);
-			if (titleNode.type === "paragraph") {
-				titleNode.data = {
-					hName: "div",
-					hProperties: { className: ["callout-title"] }
-				};
-			} else {
-				titleNode.data = {
-					hProperties: { className: ["callout-title"] }
-				};
-			}
-			indicators.push(titleNode);
-
-			calloutNodes.push({
+		if (prefs.showHint && prefs.hint) {
+			indicators.push({
 				type: "paragraph",
 				data: {
-					hName: prefs.collapsible ? "summary" : "div",
-					hProperties: { className: ["callout-indicator"] }
+					hName: "div",
+					hProperties: { className: ["callout-hint"] }
 				},
-				children: indicators
+				children: [
+					{
+						type: "html",
+						value: prefs.hint
+					}
+				]
 			});
 		}
+
+		const titleNode = fromMarkdown(title).children.at(0);
+		if (titleNode.type === "paragraph") {
+			titleNode.data = {
+				hName: "div",
+				hProperties: { className: ["callout-title"] }
+			};
+		} else {
+			titleNode.data = {
+				hProperties: { className: ["callout-title"] }
+			};
+		}
+		indicators.push(titleNode);
+
+		calloutNodes.push({
+			type: "paragraph",
+			data: {
+				hName: prefs.collapsible ? "summary" : "div",
+				hProperties: { className: ["callout-indicator"] }
+			},
+			children: indicators
+		});
 
 		if (children) {
 			calloutNodes.push({
@@ -162,7 +159,7 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 				const calloutType = aliases[node.name];
 				const callout = callouts[calloutType];
 				const data = node.data || (node.data = {});
-				const { title, showIndicator = "true", is = "aside", ...attributes } = node.attributes;
+				const { title, showHint = "true", is = "aside", ...attributes } = node.attributes;
 				const tagName = callout.tagName || options.tagName || is;
 
 				node.attributes = {
@@ -176,7 +173,7 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 					{
 						hint: callout.hint,
 						collapsible: tagName === "details",
-						showIndicator: showIndicator.toLowerCase() === "true"
+						showHint: showHint.toLowerCase() === "true"
 					}
 				);
 
