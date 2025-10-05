@@ -13,6 +13,7 @@
 /**
  * @typedef {Object} CalloutPrefs
  * @property {string} [hint] - Optional SVG icon representing the callout type
+ * @property {boolean} collapsible - Whether the callout is collapse (default: `false`), only `true` when tagName is `details`
  * @property {boolean} showIndicator - Whether to display the hint icon and title indicator (default: `true`)
  */
 
@@ -119,7 +120,7 @@ const defaults = {
 			calloutNodes.push({
 				type: "paragraph",
 				data: {
-					hName: "div",
+					hName: prefs.collapsible ? "summary" : "div",
 					hProperties: { className: ["callout-indicator"] }
 				},
 				children: indicators
@@ -161,7 +162,8 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 				const calloutType = aliases[node.name];
 				const callout = callouts[calloutType];
 				const data = node.data || (node.data = {});
-				const { title, showIndicator = "true", ...attributes } = node.attributes;
+				const { title, showIndicator = "true", is = "aside", ...attributes } = node.attributes;
+				const tagName = callout.tagName || options.tagName || is;
 
 				node.attributes = {
 					...attributes,
@@ -173,11 +175,11 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 					node.children,
 					{
 						hint: callout.hint,
+						collapsible: tagName === "details",
 						showIndicator: showIndicator.toLowerCase() === "true"
 					}
 				);
 
-				const tagName = callout.tagName || options.tagName || "aside";
 				const hast = h(tagName, node.attributes);
 				data.hName = hast.tagName;
 				data.hProperties = hast.properties;
