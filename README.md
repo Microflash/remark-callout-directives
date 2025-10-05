@@ -4,7 +4,7 @@
 [![regression](https://github.com/Microflash/remark-callout-directives/actions/workflows/regression.yml/badge.svg)](https://github.com/Microflash/remark-callout-directives/actions/workflows/regression.yml)
 [![license](https://img.shields.io/npm/l/@microflash/remark-callout-directives)](./LICENSE.md)
 
-[remark](https://github.com/remarkjs/remark) plugin to render callouts and admonitions with [directives](https://talk.commonmark.org/t/generic-directives-plugins-syntax/444)
+[remark](https://github.com/remarkjs/remark) plugin to render callouts with [directives](https://talk.commonmark.org/t/generic-directives-plugins-syntax/444)
 
 - [What’s this?](#whats-this)
 - [When should I use this?](#when-should-i-use-this)
