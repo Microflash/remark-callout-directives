@@ -125,12 +125,8 @@ export default [
 		input: `:::note{.fancy .blob data-callout="fancy" #intrigue}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
 	},
 	{
-		title: "callout without indicator",
-		input: `:::note{showIndicator="false"}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
-	},
-	{
-		title: "callout with redundant indicator flag",
-		input: `:::note{showIndicator="true"}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
+		title: "callout without hint",
+		input: `:::note{showHint="false"}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
 	},
 	{
 		title: "callout as details element",
