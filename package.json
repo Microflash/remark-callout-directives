@@ -1,7 +1,7 @@
 {
 	"name": "@microflash/remark-callout-directives",
-	"version": "4.4.0",
-	"description": "remark plugin to render callouts and admonitions with directives",
+	"version": "4.5.0",
+	"description": "Remark plugin to render callouts with directives",
 	"license": "MIT",
 	"keywords": [
 		"unified",
@@ -18,18 +18,12 @@
 	"homepage": "https://github.com/Microflash/remark-callout-directives#readme",
 	"author": "Naiyer Asif (https://www.naiyerasif.com)",
 	"type": "module",
-	"main": "index.js",
+	"main": "src/index.js",
 	"files": [
-		"index.js",
-		"themes/**/*"
+		"src/**/*"
 	],
 	"exports": {
-		".": "./index.js",
-		"./config/github": "./themes/github/index.js",
-		"./config/vitepress": "./themes/vitepress/index.js",
-		"./theme/github": "./themes/github/index.css",
-		"./theme/microflash": "./themes/microflash/index.css",
-		"./theme/vitepress": "./themes/vitepress/index.css"
+		".": "./src/index.js"
 	},
 	"scripts": {
 		"snapshot": "node --test-update-snapshots ./test/plugin.test.js",
@@ -48,5 +42,5 @@
 		"remark-rehype": "^11.1.2",
 		"unified": "^11.0.5"
 	},
-	"packageManager": "pnpm@10.7.1"
+	"packageManager": "pnpm@10.18.0"
 }

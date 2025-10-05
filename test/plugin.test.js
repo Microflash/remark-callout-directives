@@ -5,7 +5,7 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import remarkDirective from "remark-directive";
 import { it } from "node:test";
-import remarkCalloutDirectives from "../index.js";
+import remarkCalloutDirectives from "../src/index.js";
 import scenarios from "./fixtures.js";
 
 async function parse(markdown, options = {}) {
