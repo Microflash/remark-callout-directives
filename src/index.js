@@ -43,7 +43,14 @@ import { defu } from "defu";
  * @property {Function} generate - Function that creates the MDAST representation of a callout body.
  */
 const defaults = {
-	aliases: {},
+	aliases: {
+		caution: "deter",
+		danger: "deter",
+		important: "assert",
+		info: "note",
+		tip: "commend",
+		warning: "warn"
+	},
 	callouts: {
 		assert: {
 			title: "Info",
