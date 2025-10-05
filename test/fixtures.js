@@ -131,5 +131,13 @@ export default [
 	{
 		title: "callout with redundant indicator flag",
 		input: `:::note{showIndicator="true"}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
+	},
+	{
+		title: "callout as details element",
+		input: `:::note{is="details"}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
+	},
+	{
+		title: "callout as open details element",
+		input: `:::note{is="details" open}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
 	}
 ];
