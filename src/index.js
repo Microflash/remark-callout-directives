@@ -160,7 +160,7 @@ const defaults = {
  * Remark plugin to render container directives (such as, :::note) into callout elements.
  * @function remarkCalloutDirectives
  * @param {CalloutOptions} [userOptions={}] - User-defined options that override defaults.
- * @returns {import('unified').Transformer} Unified transformer function that modifies the MDAST.
+ * @returns {undefined} Unified transformer function that modifies the MDAST.
  */
 export default function remarkCalloutDirectives(userOptions = {}) {
 	const options = defu(userOptions, defaults);
