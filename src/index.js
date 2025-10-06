@@ -153,7 +153,7 @@ const defaults = {
 		}
 
 		return calloutNodes;
-	} 
+	}
 };
 
 /**
