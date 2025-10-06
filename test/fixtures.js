@@ -122,7 +122,7 @@ export default [
 	},
 	{
 		title: "callouts with custom element type",
-		input: `:::tip{is="blockquote"}\nSome **content** with _Markdown_ \`syntax\`.\n:::\n\n:::assert\nSome **content** with _Markdown_ \`syntax\`.\n:::\n\n:::note\nSome **content** with _Markdown_ \`syntax\`.\n:::`,
+		input: `:::commend{is="blockquote"}\nSome **content** with _Markdown_ \`syntax\`.\n:::\n\n:::assert\nSome **content** with _Markdown_ \`syntax\`.\n:::\n\n:::note\nSome **content** with _Markdown_ \`syntax\`.\n:::`,
 		options: {
 			tagName: "div",
 			callouts: {
