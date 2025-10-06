@@ -115,14 +115,31 @@ const defaults = {
 		}
 		indicators.push(titleNode);
 
-		calloutNodes.push({
-			type: "paragraph",
-			data: {
-				hName: prefs.collapsible ? "summary" : "div",
-				hProperties: { className: ["callout-indicator"] }
-			},
-			children: indicators
-		});
+		if (prefs.collapsible) {
+			calloutNodes.push({
+				type: "paragraph",
+				data: {
+					hName: "summary",
+				},
+				children: [{
+					type: "paragraph",
+					data: {
+						hName: "div",
+						hProperties: { className: ["callout-indicator"] }
+					},
+					children: indicators
+				}]
+			});
+		} else {
+			calloutNodes.push({
+				type: "paragraph",
+				data: {
+					hName: "div",
+					hProperties: { className: ["callout-indicator"] }
+				},
+				children: indicators
+			});
+		}
 
 		if (children) {
 			calloutNodes.push({
