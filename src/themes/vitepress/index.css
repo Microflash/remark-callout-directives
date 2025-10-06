@@ -1,0 +1,61 @@
+:root {
+	--vitepress-callout-background-info: #8e96aa24;
+	--vitepress-callout-background-tip: #646cff24;
+	--vitepress-callout-background-important: #9f7aea24;
+	--vitepress-callout-background-warning: #eab30824;
+	--vitepress-callout-background-danger: #f43f5e24;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--vitepress-callout-background-info: #65758529;
+		--vitepress-callout-background-tip: #646cff29;
+		--vitepress-callout-background-important: #9f7aea29;
+		--vitepress-callout-background-warning: #eab30829;
+		--vitepress-callout-background-danger: #f43f5e29;
+	}
+}
+
+.callout {
+	--calloutBackground: var(--callout-background, var(--vitepress-callout-background-info));
+	background-color: var(--calloutBackground);
+	border-radius: 8px;
+	padding: 16px;
+}
+
+.callout-indicator {
+	display: inline-flex;
+	text-transform: uppercase;
+	font-weight: 600;
+}
+
+.callout-indicator + * {
+	margin-top: 8px;
+	margin-block-start: 8px;
+}
+
+.callout-content:first-child,
+.callout-content:only-child {
+	margin-block-start: 0;
+}
+
+.callout-content:last-child,
+.callout-content:only-child {
+	margin-block-end: 0;
+}
+
+.callout-note {
+	--callout-background: var(--vitepress-callout-background-info);
+}
+.callout-commend {
+	--callout-background: var(--vitepress-callout-background-tip);
+}
+.callout-warn {
+	--callout-background: var(--vitepress-callout-background-warning);
+}
+.callout-deter {
+	--callout-background: var(--vitepress-callout-background-danger);
+}
+.callout-assert {
+	--callout-background: var(--vitepress-callout-background-important);
+}
