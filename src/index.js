@@ -13,7 +13,7 @@
 /**
  * @typedef {Object} CalloutPrefs
  * @property {string} [hint] - Optional SVG icon representing the callout type
- * @property {boolean} collapsible - Whether the callout is collapse (default: `false`), only `true` when tagName is `details`
+ * @property {boolean} collapsible - Whether the callout is collapsible (default: `false`), only `true` when tagName is `details`
  * @property {boolean} showHint - Whether to display the hint icon (default: `true`)
  */
 
@@ -22,6 +22,7 @@
  * @property {Aliases} [aliases] - Custom aliases for existing callouts.
  * @property {Object.<string, Callout>} [callouts] - Configuration for each callout type.
  * @property {string} [tagName] - Global HTML tag name used for wrapping the callout (default: 'aside').
+ * @property {Function} [generate] - Function that creates the MDAST representation of a callout body.
  */
 
 import { visit } from "unist-util-visit";
