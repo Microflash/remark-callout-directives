@@ -177,8 +177,8 @@ export default function remarkCalloutDirectives(userOptions = {}) {
 				const calloutType = aliases[node.name];
 				const callout = callouts[calloutType];
 				const data = node.data || (node.data = {});
-				const { title, showHint = "true", is = "aside", ...attributes } = node.attributes;
-				const tagName = callout.tagName || options.tagName || is;
+				const { title, showHint = "true", is, ...attributes } = node.attributes;
+				const tagName = is || callout.tagName || options.tagName || "aside";
 
 				node.attributes = {
 					...attributes,

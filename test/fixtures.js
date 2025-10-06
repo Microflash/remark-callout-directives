@@ -121,6 +121,18 @@ export default [
 		}
 	},
 	{
+		title: "callouts with custom element type",
+		input: `:::tip{is="blockquote"}\nSome **content** with _Markdown_ \`syntax\`.\n:::\n\n:::assert\nSome **content** with _Markdown_ \`syntax\`.\n:::\n\n:::note\nSome **content** with _Markdown_ \`syntax\`.\n:::`,
+		options: {
+			tagName: "div",
+			callouts: {
+				note: {
+					tagName: "aside"
+				}
+			}
+		}
+	},
+	{
 		title: "callout with custom attributes",
 		input: `:::note{.fancy .blob data-callout="fancy" #intrigue}\nSome **content** with _Markdown_ \`syntax\`.\n:::`
 	},
