@@ -23,7 +23,9 @@
 		"src/**/*"
 	],
 	"exports": {
-		".": "./src/index.js"
+		".": "./src/index.js",
+		"./config/github": "./src/themes/github/index.js",
+		"./theme/github": "./src/themes/github/index.css"
 	},
 	"scripts": {
 		"snapshot": "node --test-update-snapshots ./test/plugin.test.js",
