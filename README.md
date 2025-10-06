@@ -21,10 +21,11 @@
 	- [Example: custom callouts](#example-custom-callouts)
 	- [Example: configure aliases](#example-configure-aliases)
 	- [Example: configure element type](#example-configure-element-type)
-	- [Example: configure element type globally](#example-configure-element-type-globally)
-	- [Example: configure element type globally as well as specifically for a callout](#example-configure-element-type-globally-as-well-as-specifically-for-a-callout)
+	- [Example: global and local element type configuration](#example-global-and-local-element-type-configuration)
 	- [Example: override the defaults](#example-override-the-defaults)
-	- [Example: remove the indicator](#example-remove-the-indicator)
+	- [Example: remove the hint icon](#example-remove-the-hint-icon)
+	- [Example: nested callouts](#example-nested-callouts)
+	- [Example: collapsible callouts](#example-collapsible-callouts)
 	- [Example: using a theme](#example-using-a-theme)
 - [License](#license)
 
@@ -34,7 +35,7 @@ This package is a [unified](https://github.com/unifiedjs/unified) ([remark](http
 
 ## When should I use this?
 
-Callouts and admonitions are used to provide additional information related to a topic under discussion or draw out attention to potential possibilities. They are widely used in documentation by popular libraries, frameworks, and applications (for example, [Docusaurus](https://docusaurus.io/docs/markdown-features/admonitions), [Obsidian](https://help.obsidian.md/How+to/Use+callouts), etc). Use this plugin if you need something similar.
+Callouts are used to provide additional information related to a topic under discussion or draw out attention to potential possibilities. They are widely used in documentation by popular libraries, frameworks, and applications (such as [Starlight](https://starlight.astro.build/components/asides/), [Obsidian](https://help.obsidian.md/callouts), [Bear](https://bear.app/faq/callouts/) and so on). Use this plugin if you need something similar.
 
 ## Prerequisites
 
@@ -106,7 +107,7 @@ Running that with `node example.js` yields:
 <aside class="callout callout-note">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
         <path d="M12 8h.01M12 12v4"/>
         <circle cx="12" cy="12" r="10"/>
       </svg>
@@ -114,8 +115,7 @@ Running that with `node example.js` yields:
     <div class="callout-title">Note</div>
   </div>
   <div class="callout-content">
-    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.
-    </p>
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
 </aside>
 ```
@@ -126,61 +126,49 @@ The default export is `remarkCalloutDirectives`.
 
 ### Options
 
-The following options are available. All of them are optional.
+You can provide the following options. All of them are optional.
 
-- `aliases`: a list of aliases for the `callouts`
-- `callouts`: an object containing the callout definitions
-- `tagName`: global custom element type. If specified, it'll override the default `aside` element type. This can be overridden by callout specific configuration (`callouts.<calloutName>.tagName`).
+- `aliases`: a map of aliases to an existing callout type
+- `callouts`: an object containing the callout definitions, each definition containing the following properties:
+  - `title`: the display title of the callout
+  - `hint`: optional SVG icon representing the callout type
+  - `tagName`: optional HTML tag name for the callout wrapper (overrides the global `tagName` configuration)
+- `tagName`: global HTML tag name used for wrapping the callout (default: `aside`)
+- `generate(title, children, prefs)`: optional function that creates the [MDAST](https://github.com/syntax-tree/mdast) representation of a callout body. This function receives three inputs:
+  - `title`: the callout title (can be plaintext or markdown)
+  - `children`: array of MDAST nodes representing the content inside the callout
+  - `prefs`: preferences for generating the callout. The default `generate` function supports the following preferences:
+    - `hint`: optional SVG icon representing the callout type
+    - `collapsible`: whether the callout is collapsible (default: `false`), only `true` when tagName is `details`
+    - `showHint`: whether to display the hint icon (default: `true`)
+
+You can implement your own `generate` function to completely control the layout of the callout body. An example of such an implementation is available under Vitepress theme.
+
+<https://github.com/Microflash/remark-callout-directives/blob/42d6d04938edb97f23945e3ed0d9ffff8d07b0fd/src/themes/vitepress/index.js#L22-L77>
 
 ### Default options
 
 By default, the following callouts and aliases are preconfigured.
 
-```js
-{
-  aliases: {},
-  callouts: {
-    note: {
-      title: "Note",
-      hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 8h.01M12 12v4"/><circle cx="12" cy="12" r="10"/></svg>`
-    },
-    commend: {
-      title: "Success",
-      hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m8 12 2.7 2.7L16 9.3"/><circle cx="12" cy="12" r="10"/></svg>`
-    },
-    warn: {
-      title: "Warning",
-      hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 9v4m0 4h.01M8.681 4.082C9.351 2.797 10.621 2 12 2s2.649.797 3.319 2.082l6.203 11.904a4.28 4.28 0 0 1-.046 4.019C20.793 21.241 19.549 22 18.203 22H5.797c-1.346 0-2.59-.759-3.273-1.995a4.28 4.28 0 0 1-.046-4.019L8.681 4.082Z"/></svg>`
-    },
-    deter: {
-      title: "Danger",
-      hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 12s-5.6 4.6-3.6 8c1.6 2.6 5.7 2.7 7.2 0 2-3.7-3.6-8-3.6-8Z"/><path d="M13.004 2 8.5 9 6.001 6s-4.268 7.206-1.629 11.8c3.016 5.5 11.964 5.7 15.08 0C23.876 10 13.004 2 13.004 2Z"/></svg>`
-    },
-    assert: {
-      title: "Info",
-      hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/></svg>`
-    }
-  }
-}
-```
+<https://github.com/Microflash/remark-callout-directives/blob/42d6d04938edb97f23945e3ed0d9ffff8d07b0fd/src/index.js#L46-L157>
 
 ### Themes
 
-To style the callouts, import a theme from [`themes`](./themes/) folder.
+To style the callouts, import a theme from [`themes`](./src/themes/) folder.
 
-#### [GitHub](./themes/github/)
+#### [GitHub](./src/themes/github/)
 
-![GitHub theme](./samples/github.png)
+![GitHub theme](./assets/github.png)
 
-#### [VitePress](./themes/vitepress/)
+#### [Microflash](./src/themes/microflash/)
 
-![VitePress theme](./samples/vitepress.png)
+![Microflash theme](./assets/microflash.png)
 
-#### [Microflash](./themes/microflash/)
+#### [VitePress](./src/themes/vitepress/)
 
-![Microflash theme](./samples/microflash.png)
+![VitePress theme](./assets/vitepress.png)
 
-For more advanced customizations, take a look at the existing [themes](./themes/) and remix your own.
+For more advanced customizations, take a look at the existing themes and remix your own.
 
 ## Examples
 
@@ -200,8 +188,8 @@ Running `example.js` will yield:
 <aside class="callout callout-warn">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <path d="M12 9v4m0 4h.01M8.681 4.082C9.351 2.797 10.621 2 12 2s2.649.797 3.319 2.082l6.203 11.904a4.28 4.28 0 0 1-.046 4.019C20.793 21.241 19.549 22 18.203 22H5.797c-1.346 0-2.59-.759-3.273-1.995a4.28 4.28 0 0 1-.046-4.019L8.681 4.082Z"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"/>
       </svg>
     </div>
     <div class="callout-title">Hold on there</div>
@@ -228,13 +216,11 @@ Running `example.js` will yield:
 <aside class="callout callout-warn">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <path d="M12 9v4m0 4h.01M8.681 4.082C9.351 2.797 10.621 2 12 2s2.649.797 3.319 2.082l6.203 11.904a4.28 4.28 0 0 1-.046 4.019C20.793 21.241 19.549 22 18.203 22H5.797c-1.346 0-2.59-.759-3.273-1.995a4.28 4.28 0 0 1-.046-4.019L8.681 4.082Z"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"/>
       </svg>
     </div>
-    <div class="callout-title">
-      <strong>Hold</strong> on <em>there</em>!
-    </div>
+    <div class="callout-title"><strong>Hold</strong> on <em>there</em>!</div>
   </div>
   <div class="callout-content">
     <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
@@ -349,7 +335,7 @@ Running that with `node example.js` yields:
 <aside class="callout callout-deter">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
         <path d="M12 12s-5.6 4.6-3.6 8c1.6 2.6 5.7 2.7 7.2 0 2-3.7-3.6-8-3.6-8Z"/>
         <path d="M13.004 2 8.5 9 6.001 6s-4.268 7.206-1.629 11.8c3.016 5.5 11.964 5.7 15.08 0C23.876 10 13.004 2 13.004 2Z"/>
       </svg>
@@ -364,7 +350,36 @@ Running that with `node example.js` yields:
 
 ### Example: configure element type
 
-By default, a callout is rendered as an [`aside`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside). You can override this behavior by providing a `tagName` for the callout.
+By default, a callout is rendered as an [`aside`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside). You can override this behavior by providing `is` property on demand.
+
+Say we have the following file `example.md`:
+
+```md
+:::assert{is="blockquote"}
+Some **content** with _Markdown_ `syntax`.
+:::
+```
+
+Running the `example.js` yields:
+
+```html
+<blockquote class="callout callout-assert">
+  <div class="callout-indicator">
+    <div class="callout-hint">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <circle cx="19" cy="5" r="3"/>
+        <path d="M20 11.929V15c0 1.656-1.344 3-3 3h-3l-6 4v-4H5c-1.656 0-3-1.344-3-3V7c0-1.656 1.344-3 3-3h7.071"/>
+      </svg>
+    </div>
+    <div class="callout-title">Info</div>
+  </div>
+  <div class="callout-content">
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
+  </div>
+</blockquote>
+```
+
+You can override this behavior for all instances of a specific callout by providing a `tagName` for that callout.
 
 Say we have the following file `example.md`:
 
@@ -412,8 +427,9 @@ Running that with `node example.js` yields:
 <div class="callout callout-assert">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <circle cx="19" cy="5" r="3"/>
+        <path d="M20 11.929V15c0 1.656-1.344 3-3 3h-3l-6 4v-4H5c-1.656 0-3-1.344-3-3V7c0-1.656 1.344-3 3-3h7.071"/>
       </svg>
     </div>
     <div class="callout-title">Info</div>
@@ -423,8 +439,6 @@ Running that with `node example.js` yields:
   </div>
 </div>
 ```
-
-### Example: configure element type globally
 
 You can override the element type of all callouts by providing a `tagName`.
 
@@ -454,7 +468,7 @@ async function main() {
     .use(remarkParse)
     .use(remarkDirective)
     .use(remarkCalloutDirectives, {
-      tagName: "section"
+      tagName: "div"
     })
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeStringify, { allowDangerousHtml: true })
@@ -467,11 +481,12 @@ async function main() {
 Running that with `node example.js` yields:
 
 ```html
-<section class="callout callout-assert">
+<div class="callout callout-assert">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <circle cx="19" cy="5" r="3"/>
+        <path d="M20 11.929V15c0 1.656-1.344 3-3 3h-3l-6 4v-4H5c-1.656 0-3-1.344-3-3V7c0-1.656 1.344-3 3-3h7.071"/>
       </svg>
     </div>
     <div class="callout-title">Info</div>
@@ -479,16 +494,20 @@ Running that with `node example.js` yields:
   <div class="callout-content">
     <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
-</section>
+</div>
 ```
 
-### Example: configure element type globally as well as specifically for a callout
+### Example: global and local element type configuration
 
-You can mix the `tagName` configurations globally and specifically for a callout.
+You can mix the `tagName` and `is` configurations globally and specifically for a callout.
 
 Say we have the following file `example.md`:
 
 ```md
+:::tip{is="blockquote"}
+Some **content** with _Markdown_ `syntax`.
+:::
+
 :::assert
 Some **content** with _Markdown_ `syntax`.
 :::
@@ -516,10 +535,10 @@ async function main() {
     .use(remarkParse)
     .use(remarkDirective)
     .use(remarkCalloutDirectives, {
-      tagName: "section",
+      tagName: "div",
       callouts: {
-        assert: {
-          tagName: "div"
+        note: {
+          tagName: "aside"
         }
       }
     })
@@ -534,11 +553,27 @@ async function main() {
 Running that with `node example.js` yields:
 
 ```html
+<blockquote class="callout callout-commend">
+  <div class="callout-indicator">
+    <div class="callout-hint">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <path d="m8 12 2.7 2.7L16 9.3"/>
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+    </div>
+    <div class="callout-title">Success</div>
+  </div>
+  <div class="callout-content">
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
+  </div>
+</blockquote>
+
 <div class="callout callout-assert">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <path d="M12.5 7.5h.01m-.01 4v4m-7.926.685L2 21l6.136-1.949c1.307.606 2.791.949 4.364.949 5.243 0 9.5-3.809 9.5-8.5S17.743 3 12.5 3 3 6.809 3 11.5c0 1.731.579 3.341 1.574 4.685"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <circle cx="19" cy="5" r="3"/>
+        <path d="M20 11.929V15c0 1.656-1.344 3-3 3h-3l-6 4v-4H5c-1.656 0-3-1.344-3-3V7c0-1.656 1.344-3 3-3h7.071"/>
       </svg>
     </div>
     <div class="callout-title">Info</div>
@@ -548,10 +583,10 @@ Running that with `node example.js` yields:
   </div>
 </div>
 
-<section class="callout callout-note">
+<aside class="callout callout-note">
   <div class="callout-indicator">
     <div class="callout-hint">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
         <path d="M12 8h.01M12 12v4"/>
         <circle cx="12" cy="12" r="10"/>
       </svg>
@@ -559,10 +594,9 @@ Running that with `node example.js` yields:
     <div class="callout-title">Note</div>
   </div>
   <div class="callout-content">
-    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.
-    </p>
+    <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
-</section>
+</aside>
 ```
 
 ### Example: override the defaults
@@ -629,14 +663,14 @@ Running that with `node example.js` yields:
 </aside>
 ```
 
-### Example: remove the indicator
+### Example: remove the hint icon
 
-You can remove the indicator using the `showIndicator="false"` property on a callout.
+You can remove the hint icon using the `showHint="false"` property on a callout.
 
 Say we have the following file `example.md`:
 
 ```md
-::note{showIndicator="false"}
+:::note{showHint="false"}
 Some **content** with _Markdown_ `syntax`.
 :::
 ```
@@ -671,15 +705,120 @@ Running that with `node example.js` yields:
 
 ```html
 <aside class="callout callout-note">
+  <div class="callout-indicator">
+    <div class="callout-title">Note</div>
+  </div>
   <div class="callout-content">
     <p>Some <strong>content</strong> with <em>Markdown</em> <code>syntax</code>.</p>
   </div>
 </aside>
 ```
 
+### Example: nested callouts
+
+You can nest the callouts within each other. Make sure to add additional colons `:` to disambiguate them.
+
+Say we have the following file `example.md`:
+
+```md
+::::warn
+Critical content demanding immediate user attention due to potential risks.
+
+:::note
+Nested information relevant to this context.
+:::
+::::
+```
+
+Running this with `node example.js` yields:
+
+```html
+<aside class="callout callout-warn">
+  <div class="callout-indicator">
+    <div class="callout-hint">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"/>
+      </svg>
+    </div>
+    <div class="callout-title">Warning</div>
+  </div>
+  <div class="callout-content">
+    <p>Critical content demanding immediate user attention due to potential risks.</p>
+    <aside class="callout callout-note">
+      <div class="callout-indicator">
+        <div class="callout-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+            <path d="M12 8h.01M12 12v4"/>
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+        </div>
+        <div class="callout-title">Note</div>
+      </div>
+      <div class="callout-content">
+        <p>Nested information relevant to this context.</p>
+      </div>
+    </aside>
+  </div>
+</aside>
+```
+
+### Example: collapsible callouts
+
+You can make a callout collapsible by setting the `tagName` or `is` property to `details`. By default, such a callout is collapsed but you can initialize it as open using `open` property.
+
+Say we have the following file `example.md`:
+
+```md
+:::deter{is="details"}
+This is a collapsed callout.
+:::
+
+:::commend{is="details" open}
+This is a collapsible callout that is open by default.
+:::
+```
+
+Running this with `node example.js` yields:
+
+```html
+<details class="callout callout-deter">
+  <summary>
+    <div class="callout-indicator">
+      <div class="callout-hint">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+          <path d="M12 12s-5.6 4.6-3.6 8c1.6 2.6 5.7 2.7 7.2 0 2-3.7-3.6-8-3.6-8Z"/>
+          <path d="M13.004 2 8.5 9 6.001 6s-4.268 7.206-1.629 11.8c3.016 5.5 11.964 5.7 15.08 0C23.876 10 13.004 2 13.004 2Z"/>
+        </svg>
+      </div>
+      <div class="callout-title">Danger</div>
+    </div>
+  </summary>
+  <div class="callout-content">
+    <p>This is a collapsed callout.</p>
+  </div>
+</details>
+
+<details open class="callout callout-commend">
+  <summary>
+    <div class="callout-indicator">
+      <div class="callout-hint">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <path d="M22 4 12 14.01l-3-3"/>
+        </svg>
+      </div>
+      <div class="callout-title">Tip</div>
+    </div>
+  </summary>
+  <div class="callout-content">
+    <p>This is a collapsible callout that is open by default.</p>
+  </div>
+</details>
+```
+
 ### Example: using a theme
 
-Say, you want to use the [GitHub](./themes/github/) theme.
+Say, you want to use the [GitHub](./src/themes/github/) theme.
 
 First, import the options for this theme and pass it to the plugin as follows.
 
@@ -713,7 +852,7 @@ Finally, import the CSS file. If you've an entrypoint file in your application, 
 ```js
 import "@microflash/remark-callout-directives/theme/github"
 // or using URL import
-import "https://unpkg.com/@microflash/remark-callout-directives/themes/github/index.css"
+import "https://unpkg.com/@microflash/remark-callout-directives/src/themes/github/index.css"
 ```
 
 If you're bundling the CSS files using a bundler, you can import the CSS in your main CSS file containing other imports.
@@ -733,8 +872,8 @@ If you're using Sass, you can import the CSS in your main Sass file.
 You can also import the CSS file directly in browsers, with [unpkg.com](https://unpkg.com) or [jsdelivr.net](https://jsdelivr.net):
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@microflash/remark-callout-directives/themes/github/index.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@microflash/remark-callout-directives/themes/github/index.css">
+<link rel="stylesheet" href="https://unpkg.com/@microflash/remark-callout-directives/src/themes/github/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@microflash/remark-callout-directives/src/themes/github/index.css">
 ```
 
 ## License
