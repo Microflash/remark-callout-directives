@@ -25,7 +25,8 @@
 	"exports": {
 		".": "./src/index.js",
 		"./config/github": "./src/themes/github/index.js",
-		"./theme/github": "./src/themes/github/index.css"
+		"./theme/github": "./src/themes/github/index.css",
+		"./theme/microflash": "./src/themes/microflash/index.css"
 	},
 	"scripts": {
 		"snapshot": "node --test-update-snapshots ./test/plugin.test.js",
